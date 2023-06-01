@@ -154,6 +154,14 @@ processors:
           - truncate_all(attributes, 4095)
           - truncate_all(resource.attributes, 4095)
 
+  # do not report metric description
+  transform/metric_description:
+    error_mode: ignore
+    metric_statements:
+      - context: metric
+        statements:
+          - set(description, "")
+
   # used to prevent out of memory situations on the collector
   memory_limiter:
     check_interval: 1s
@@ -199,6 +207,7 @@ service:
         - filter/exclude_system_disk
         - filter/exclude_network
         - attributes/exclude_system_paging
+        - transform/metric_description
         - batch
         - resourcedetection
         - resourcedetection/cloud
